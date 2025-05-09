@@ -203,8 +203,8 @@
           previewImage.style.display = message.hasValidFrame ? "block" : "none";
         } else if (message.type === "image-ready") {
           // Update preview image
-          previewImage.src = message.imageData;
-          previewImage.style.display = "block";
+          // previewImage.src = message.imageData;
+          // previewImage.style.display = "block";
           selectionMessage.style.display = "none";
 
           const apiKey = apiKeyInput.value.trim();
@@ -231,7 +231,6 @@
                   seed: Math.floor(Math.random() * 1000000000),
                   model: "gen4_turbo",
                   promptText: "Generate a video",
-                  watermark: false,
                   duration: 5,
                   ratio: message.aspectRatio,
                 }),
