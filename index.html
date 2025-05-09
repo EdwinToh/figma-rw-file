@@ -43,6 +43,23 @@
       #videoContainer {
         margin-top: 16px;
       }
+      .preview-container {
+        border: 1px solid #e5e5e5;
+        padding: 16px;
+        border-radius: 8px;
+        margin-top: 16px;
+      }
+      .preview-image {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: none;
+      }
+      .selection-message {
+        color: #666;
+        text-align: center;
+        padding: 20px;
+      }
     </style>
   </head>
   <body>
@@ -61,7 +78,19 @@
 
       <div id="videoGeneration" style="display: none">
         <h3>Video Generation</h3>
-        <button id="generateVideo" class="button">Generate Video</button>
+        <div class="preview-container">
+          <div id="selectionMessage" class="selection-message">
+            Select a frame to generate video
+          </div>
+          <img
+            id="previewImage"
+            class="preview-image"
+            alt="Selected frame preview"
+          />
+        </div>
+        <button id="generateVideo" class="button" style="display: none">
+          Generate Video
+        </button>
         <div id="status"></div>
         <div id="videoContainer"></div>
       </div>
@@ -75,6 +104,8 @@
       const videoGeneration = document.getElementById("videoGeneration");
       const generateVideoButton = document.getElementById("generateVideo");
       const statusElement = document.getElementById("status");
+      const previewImage = document.getElementById("previewImage");
+      const selectionMessage = document.getElementById("selectionMessage");
 
       // Request the API key when page loads
       parent.postMessage(
@@ -162,7 +193,20 @@
         } else if (message.type === "api-key-saved") {
           apiKeyStatus.textContent = "API key saved successfully";
           videoGeneration.style.display = "block";
+        } else if (message.type === "selection-changed") {
+          generateVideoButton.style.display = message.hasValidFrame
+            ? "block"
+            : "none";
+          selectionMessage.style.display = message.hasValidFrame
+            ? "none"
+            : "block";
+          previewImage.style.display = message.hasValidFrame ? "block" : "none";
         } else if (message.type === "image-ready") {
+          // Update preview image
+          previewImage.src = message.imageData;
+          previewImage.style.display = "block";
+          selectionMessage.style.display = "none";
+
           const apiKey = apiKeyInput.value.trim();
           if (!apiKey) {
             statusElement.textContent =
@@ -179,13 +223,13 @@
                 method: "POST",
                 headers: {
                   Authorization: `Bearer ${apiKey}`,
-                  "X-Runway-Version": "2024-09-13",
+                  "X-Runway-Version": "2024-11-06",
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                   promptImage: message.imageData,
                   seed: Math.floor(Math.random() * 1000000000),
-                  model: "gen3a_turbo",
+                  model: "gen4_turbo",
                   promptText: "Generate a video",
                   watermark: false,
                   duration: 5,
