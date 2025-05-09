@@ -77,14 +77,28 @@
       const statusElement = document.getElementById("status");
 
       // Request the API key when page loads
-      parent.postMessage({ pluginMessage: { type: "get-api-key" } }, "*");
+      parent.postMessage(
+        {
+          pluginMessage: {
+            type: "get-api-key",
+          },
+          pluginId: "1502691635872451437",
+        },
+        "*"
+      );
 
       // Handle save API key
       saveApiKeyButton.onclick = () => {
         const apiKey = apiKeyInput.value.trim();
         if (apiKey) {
           parent.postMessage(
-            { pluginMessage: { type: "save-api-key", apiKey } },
+            {
+              pluginMessage: {
+                type: "save-api-key",
+                apiKey,
+              },
+              pluginId: "1502691635872451437",
+            },
             "*"
           );
         }
@@ -93,7 +107,15 @@
       // Handle generate video
       generateVideoButton.onclick = () => {
         statusElement.textContent = "";
-        parent.postMessage({ pluginMessage: { type: "generate-video" } }, "*");
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: "generate-video",
+            },
+            pluginId: "1502691635872451437",
+          },
+          "*"
+        );
       };
 
       async function pollTaskStatus(taskId, apiKey) {
