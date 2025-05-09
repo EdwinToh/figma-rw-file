@@ -172,6 +172,12 @@
 
           try {
             statusElement.textContent = "Starting video generation...";
+            const videosContainer = document.getElementById("videoContainer");
+            const newVideoContainer = document.createElement("div");
+            videosContainer.appendChild(newVideoContainer);
+            newVideoContainer.appendChild(
+              (document.createElement("div").innerHTML = "Generating video...")
+            );
 
             const response = await fetch(
               "https://proxy.corsfix.com/?https://api.dev.runwayml.com/v1/image_to_video",
@@ -205,8 +211,12 @@
             const videoUrl = await pollTaskStatus(data.id, apiKey);
 
             statusElement.textContent = "Video generated successfully!";
-            const videoContainer = document.getElementById("videoContainer");
-            videoContainer.innerHTML = `<video controls src="${videoUrl}" width="100%" height="auto"></video>`;
+            const video = document.createElement("video");
+            video.src = videoUrl;
+            video.controls = true;
+            video.width = "100%";
+            video.height = "auto";
+            newVideoContainer.appendChild(video);
 
             // Send video URL back to plugin code
             parent.postMessage(
