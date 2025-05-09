@@ -206,7 +206,7 @@
 
             statusElement.textContent = "Video generated successfully!";
             const videoContainer = document.getElementById("videoContainer");
-            videoContainer.innerHTML = `<video controls src="${videoUrl}"></video>`;
+            videoContainer.innerHTML = `<video controls src="${videoUrl}" width="100%" height="auto"></video>`;
 
             // Send video URL back to plugin code
             parent.postMessage(
