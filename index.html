@@ -175,9 +175,9 @@
             const videosContainer = document.getElementById("videoContainer");
             const newVideoContainer = document.createElement("div");
             videosContainer.appendChild(newVideoContainer);
-            newVideoContainer.appendChild(
-              (document.createElement("div").innerHTML = "Generating video...")
-            );
+            const statusDiv = document.createElement("div");
+            statusDiv.textContent = "Generating video...";
+            newVideoContainer.appendChild(statusDiv);
 
             const response = await fetch(
               "https://proxy.corsfix.com/?https://api.dev.runwayml.com/v1/image_to_video",
