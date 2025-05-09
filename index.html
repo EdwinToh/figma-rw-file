@@ -173,6 +173,7 @@
           try {
             statusElement.textContent = "Starting video generation...";
             const videosContainer = document.getElementById("videoContainer");
+            videosContainer.innerHTML = ""; // Clear previous content
             const newVideoContainer = document.createElement("div");
             videosContainer.appendChild(newVideoContainer);
             const statusDiv = document.createElement("div");
@@ -211,6 +212,7 @@
             const videoUrl = await pollTaskStatus(data.id, apiKey);
 
             statusElement.textContent = "Video generated successfully!";
+            statusDiv.textContent = "Video generated successfully!";
             const video = document.createElement("video");
             video.src = videoUrl;
             video.controls = true;
