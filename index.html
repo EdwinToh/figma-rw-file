@@ -251,15 +251,12 @@
           apiKeyStatus.textContent = "API key saved";
           videoGeneration.style.display = "block";
         } else if (message.type === "selection-changed") {
-          console.log("Selection changed message received:", message);
           if (message.hasValidFrame && message.imageData) {
-            console.log("Showing preview and generate button");
             previewImage.style.display = "block";
             generateVideoButton.style.display = "block";
             selectionMessage.style.display = "none";
             previewImage.src = message.imageData;
           } else {
-            console.log("Hiding preview and generate button");
             previewImage.style.display = "none";
             generateVideoButton.style.display = "none";
             selectionMessage.style.display = "block";
@@ -291,7 +288,7 @@
                   promptImage: message.imageData,
                   seed: Math.floor(Math.random() * 1000000000),
                   model: "gen4_turbo",
-                  promptText: "Generate a video",
+                  promptText: "animate scene",
                   duration: 5,
                   ratio: message.aspectRatio,
                 }),
