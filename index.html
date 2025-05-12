@@ -395,11 +395,9 @@
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  prompt: promptTextArea.value,
-                  width: 1024,
-                  height: 1024,
-                  num_outputs: 1,
-                  model: "frames",
+                  promptText: promptTextArea.value,
+                  outputCount: 1,
+                  ratio: "1920:1088",
                 }),
               }
             );
@@ -422,11 +420,25 @@
             image.src = imageUrl;
             image.classList.add("preview-image");
             image.draggable = true;
-
-            // Add drag event handlers
-            image.addEventListener("dragstart", (e) => {
-              e.dataTransfer.setData("text/plain", imageUrl);
-              e.dataTransfer.effectAllowed = "copy";
+            image.addEventListener("dragend", (e) => {
+              // Don't proceed if the item was dropped inside the plugin window.
+              if (e.view.length === 0) return;
+              console.log("dragend", e);
+              const file = new File([e.target.innerHTML], e.target.src, {
+                type: "image/jpeg",
+              });
+              window.parent.postMessage(
+                {
+                  pluginDrop: {
+                    clientX: e.clientX,
+                    clientY: e.clientY,
+                    files: [file],
+                  },
+                },
+                "*"
+              );
+              // e.dataTransfer.setData("text/plain", testImage.src);
+              // e.dataTransfer.effectAllowed = "copy";
             });
 
             generationsContainer.appendChild(image);
