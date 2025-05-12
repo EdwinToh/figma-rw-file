@@ -166,14 +166,7 @@
           <button id="generateVideo" class="button">Generate Video</button>
         </div>
         <div id="status"></div>
-        <div id="generationsContainer">
-          <img
-            src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ2eFBnx0wwcyGIS4PcXFYa2iHlrtnd03zOsYZL8NTk4BWZnzo8VKN17XUEl35qyC7Ld6O1K8bJGtcDD5ohoVLDDw"
-            style="width: 100%; height: auto"
-            alt="Generated image"
-            id="testImage"
-          />
-        </div>
+        <div id="generationsContainer"></div>
       </div>
     </div>
 
@@ -196,32 +189,6 @@
       const promptTextArea = document.getElementById("prompt");
       const durationSelect = document.getElementById("duration");
       let isSettingsOpen = true;
-
-      const testImage = document.getElementById("testImage");
-
-      testImage.draggable = true;
-
-      // Add drag event handlers
-      testImage.addEventListener("dragend", (e) => {
-        // Don't proceed if the item was dropped inside the plugin window.
-        if (e.view.length === 0) return;
-        console.log("dragend", e);
-        const file = new File([e.target.innerHTML], e.target.src, {
-          type: "image/jpeg",
-        });
-        window.parent.postMessage(
-          {
-            pluginDrop: {
-              clientX: e.clientX,
-              clientY: e.clientY,
-              files: [file],
-            },
-          },
-          "*"
-        );
-        // e.dataTransfer.setData("text/plain", testImage.src);
-        // e.dataTransfer.effectAllowed = "copy";
-      });
 
       settingsIcon.onclick = () => {
         isSettingsOpen = !isSettingsOpen;
