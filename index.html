@@ -411,7 +411,8 @@
             }
 
             const data = await response.json();
-            const imageUrl = data.images[0];
+            console.log("data", data);
+            const imageUrl = await pollTaskStatus(data.id, apiKey);
 
             statusElement.textContent = "Image generated successfully!";
             const generationsContainer = document.getElementById(
