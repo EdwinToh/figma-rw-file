@@ -208,7 +208,7 @@
           await new Promise((resolve) => setTimeout(resolve, 2000));
 
           const statusResponse = await fetch(
-            `https://proxy.corsfix.com/?https://api.dev.runwayml.com/v1/tasks/${taskId}`,
+            `https://api.dev.runwayml.com/v1/tasks/${taskId}`,
             {
               headers: {
                 Authorization: `Bearer ${apiKey}`,
@@ -276,7 +276,7 @@
             statusElement.textContent = "Starting video generation...";
 
             const response = await fetch(
-              "https://proxy.corsfix.com/?https://api.dev.runwayml.com/v1/image_to_video",
+              "https://api.dev.runwayml.com/v1/image_to_video",
               {
                 method: "POST",
                 headers: {
