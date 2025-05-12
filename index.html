@@ -79,6 +79,11 @@
         border-radius: 4px;
         cursor: move;
       }
+      .generated-image {
+        width: 100%;
+        height: auto;
+        cursor: move;
+      }
       .selection-message {
         color: #666;
         text-align: center;
@@ -347,7 +352,7 @@
             return;
           }
           // Update preview image
-          selectionMessage.style.display = "none";
+          // selectionMessage.style.display = "none";
 
           try {
             statusElement.textContent = "Starting image generation...";
@@ -387,7 +392,7 @@
             );
             const image = document.createElement("img");
             image.src = imageUrl;
-            image.classList.add("preview-image");
+            image.classList.add("generated-image");
             image.draggable = true;
             image.addEventListener("dragend", (e) => {
               // Don't proceed if the item was dropped inside the plugin window.
