@@ -283,20 +283,28 @@
         }
       };
 
-      imageTab.onclick = () => {
+      function showImageTab() {
         activeTab = "image";
         imageTab.classList.add("active");
         videoTab.classList.remove("active");
         generateImageContainer.style.display = "block";
         generateVideoContainer.style.display = "none";
-      };
-
-      videoTab.onclick = () => {
+      }
+      function showVideoTab() {
         activeTab = "video";
         videoTab.classList.add("active");
         imageTab.classList.remove("active");
         generateImageContainer.style.display = "none";
         generateVideoContainer.style.display = "flex";
+      }
+      function disableVideoGen() {}
+
+      imageTab.onclick = () => {
+        showImageTab();
+      };
+
+      videoTab.onclick = () => {
+        showVideoTab();
       };
 
       // Request the API key when page loads
@@ -408,7 +416,6 @@
         } else if (message.type === "selection-changed") {
           if (message.hasValidFrame && message.imageData) {
             previewImages.style.display = "flex";
-            generateVideoContainer.style.display = "flex";
             if (message.imageData.length > 1) {
               generateVideoButton.disabled = true;
             } else {
@@ -430,7 +437,6 @@
             }
           } else {
             previewImages.style.display = "none";
-            generateVideoContainer.style.display = "none";
             selectionMessage.style.display = "block";
           }
           if (message.error) {
