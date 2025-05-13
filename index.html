@@ -464,6 +464,7 @@
           } else {
             previewImages.style.display = "none";
             selectionMessage.style.display = "block";
+            generateVideoButton.disabled = true;
           }
           if (message.error) {
             selectionMessage.textContent = message.error;
