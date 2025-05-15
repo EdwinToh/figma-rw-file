@@ -553,7 +553,9 @@
             console.log(message.imageData);
             // Reference images must be between 0.5 and 2 in aspect ratio
             const resizedImageData = await Promise.all(
-              message.imageData.map((image) => resizeBase64Image(image))
+              message.imageData.map((image) =>
+                resizeBase64ImageToAllowedAspectRatio(image)
+              )
             );
 
             const response = await fetch(
