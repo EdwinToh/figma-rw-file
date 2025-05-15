@@ -519,11 +519,9 @@
                   promptText: promptTextArea.value,
                   model: "gen4_image",
                   ratio: "1920:1088",
-                  referenceImages: message.imageData
-                    ? message.imageData.map((image) => ({
-                        uri: image,
-                      }))
-                    : null,
+                  ...(message.imageData && {
+                    referenceImages: message.imageData,
+                  }),
                 }),
               }
             );
