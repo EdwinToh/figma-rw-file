@@ -268,6 +268,7 @@
             Generations will appear here. Drag images to place on canvas.
             Removing or closing the plugin will permanently delete generations
           </p>
+          <div id="queue"></div>
           <div id="status"></div>
         </div>
       </div>
@@ -285,6 +286,7 @@
       const generateVideoButton = document.getElementById("generateVideo");
       const generateImageButton = document.getElementById("generateImage");
       const statusElement = document.getElementById("status");
+      const queueElement = document.getElementById("queue");
       const previewImages = document.getElementById("previewImages");
       const selectionMessage = document.getElementById("selectionMessage");
       const settingsIcon = document.getElementById("settingsIcon");
@@ -296,6 +298,7 @@
 
       let isSettingsOpen = true;
       let activeTab = "image";
+      let generationStatus = {};
 
       // You can get this plugin id once you have installed the plugin.
       const PLUGIN_ID = "1502691635872451437";
@@ -323,7 +326,11 @@
         generateImageContainer.style.display = "none";
         generateVideoContainer.style.display = "flex";
       }
-      function disableVideoGen() {}
+      function updateGenerationStatus() {
+        queueElement.innerHTML = `${
+          Object.keys(generationStatus).length
+        } generations in queue`;
+      }
 
       imageTab.onclick = () => {
         showImageTab();
@@ -414,8 +421,18 @@
           const statusData = await statusResponse.json();
 
           if (statusData.status === "SUCCEEDED") {
+            generationStatus = {
+              ...generationStatus,
+              [taskId]: "SUCCEEDED",
+            };
+            updateGenerationStatus();
             return statusData.output[0];
           } else if (statusData.status === "FAILED") {
+            generationStatus = {
+              ...generationStatus,
+              [taskId]: "FAILED",
+            };
+            updateGenerationStatus();
             throw new Error("Generation failed");
           }
 
@@ -512,6 +529,11 @@
             }
 
             const data = await response.json();
+            generationStatus = {
+              ...generationStatus,
+              [data.id]: "PENDING",
+            };
+            updateGenerationStatus();
             const imageUrl = await pollTaskStatus(data.id, apiKey);
 
             statusElement.textContent = "Image generated successfully!";
@@ -633,6 +655,11 @@
             }
 
             const data = await response.json();
+            generationStatus = {
+              ...generationStatus,
+              [data.id]: "PENDING",
+            };
+            updateGenerationStatus();
             const videoUrl = await pollTaskStatus(data.id, apiKey);
 
             statusElement.textContent = "Video generated successfully!";
