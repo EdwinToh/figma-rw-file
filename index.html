@@ -522,7 +522,10 @@
                   model: "gen4_image",
                   ratio: "1920:1088",
                   ...(message.imageData.length > 0 && {
-                    referenceImages: message.imageData,
+                    referenceImages: message.imageData.map((image, idx) => ({
+                      uri: image,
+                      tag: "IMG_" + idx + 1,
+                    })),
                   }),
                 }),
               }
