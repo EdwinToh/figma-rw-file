@@ -507,7 +507,7 @@
             statusElement.textContent = "Starting image generation...";
 
             const response = await fetch(
-              "https://proxy.corsfix.com/?https://api.dev.runwayml.com/v1/text_to_image",
+              "https://proxy.corsfix.com/?https://api.dev-stage.runwayml.com/v1/text_to_image",
               {
                 method: "POST",
                 headers: {
@@ -517,8 +517,13 @@
                 },
                 body: JSON.stringify({
                   promptText: promptTextArea.value,
-                  model: "frames",
+                  model: "gen4_image",
                   ratio: "1920:1088",
+                  referenceImages: message.imageData
+                    ? message.imageData.map((image) => ({
+                        uri: image,
+                      }))
+                    : null,
                 }),
               }
             );
