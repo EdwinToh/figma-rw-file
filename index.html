@@ -443,20 +443,34 @@
         }
       }
 
-      function resizeBase64Image(base64, maxWidth, maxHeight) {
+      function resizeBase64ImageToAllowedAspectRatio(base64) {
         return new Promise((resolve, reject) => {
           const img = new Image();
           img.onload = () => {
             const originalWidth = img.width;
             const originalHeight = img.height;
+            const originalAspect = originalWidth / originalHeight;
 
-            // Calculate aspect-ratio-preserving dimensions
-            const ratio = Math.min(
-              maxWidth / originalWidth,
-              maxHeight / originalHeight
-            );
-            const newWidth = Math.round(originalWidth * ratio);
-            const newHeight = Math.round(originalHeight * ratio);
+            let newWidth = originalWidth;
+            let newHeight = originalHeight;
+
+            if (originalAspect < 0.5) {
+              // Too tall → scale width up to match 0.5 aspect
+              newWidth = Math.round(originalHeight * 0.5);
+              newHeight = originalHeight;
+            } else if (originalAspect > 2) {
+              // Too wide → scale height up to match 2 aspect
+              newHeight = Math.round(originalWidth / 2);
+              newWidth = originalWidth;
+            }
+
+            // Optionally constrain max dimension to `targetSize`
+            const maxDim = Math.max(newWidth, newHeight);
+            if (maxDim > 1920) {
+              const scale = 1920 / maxDim;
+              newWidth = Math.round(newWidth * scale);
+              newHeight = Math.round(newHeight * scale);
+            }
 
             const canvas = document.createElement("canvas");
             canvas.width = newWidth;
@@ -539,9 +553,7 @@
             console.log(message.imageData);
             // Reference images must be between 0.5 and 2 in aspect ratio
             const resizedImageData = await Promise.all(
-              message.imageData.map((image) =>
-                resizeBase64Image(image, 1920, 1088)
-              )
+              message.imageData.map((image) => resizeBase64Image(image))
             );
 
             const response = await fetch(
