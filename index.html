@@ -263,12 +263,14 @@
           <button id="generateVideo" class="button">Generate Video</button>
         </div>
         <div id="generationsContainer">
-          <h4>Generations</h4>
+          <h4>
+            Generations
+            <span id="queue"></span>
+          </h4>
           <p>
             Generations will appear here. Drag images to place on canvas.
             Removing or closing the plugin will permanently delete generations
           </p>
-          <div id="queue"></div>
           <div id="status"></div>
         </div>
       </div>
@@ -327,9 +329,10 @@
         generateVideoContainer.style.display = "flex";
       }
       function updateGenerationStatus() {
-        queueElement.innerHTML = `${
-          Object.keys(generationStatus).length
-        } generations in queue`;
+        const generating = Object.values(generationStatus).filter(
+          (status) => status === "PENDING"
+        ).length;
+        queueElement.innerHTML = `(${generating} generating)`;
       }
 
       imageTab.onclick = () => {
