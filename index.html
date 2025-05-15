@@ -253,6 +253,14 @@
         </div>
         <textarea id="prompt" placeholder="Enter a prompt"></textarea>
         <div id="generateImageContainer">
+          <select id="aspectRatio">
+            <option value="1920:1088" selected>16:9</option>
+            <option value="1088:1920">9:16</option>
+            <option value="1088:1088">1:1</option>
+            <option value="1460:1088">4:3</option>
+            <option value="1088:1460">3:4</option>
+            <option value="2112:912">21:9</option>
+          </select>
           <button id="generateImage" class="button">Generate Image</button>
         </div>
         <div id="generateVideoContainer" style="display: none">
@@ -297,7 +305,7 @@
       const durationSelect = document.getElementById("duration");
       const imageTab = document.getElementById("tabs-image");
       const videoTab = document.getElementById("tabs-video");
-
+      const aspectRatioSelect = document.getElementById("aspectRatio");
       let isSettingsOpen = true;
       let activeTab = "image";
       let generationStatus = {};
@@ -570,7 +578,7 @@
                 body: JSON.stringify({
                   promptText: promptTextArea.value,
                   model: "gen4_image",
-                  ratio: "1920:1088",
+                  ratio: aspectRatioSelect.value,
                   ...(message.imageData.length > 0 && {
                     referenceImages: resizedImageData.map((image, idx) => ({
                       uri: image,
